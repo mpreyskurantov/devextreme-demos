@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using DevExtreme.NETCore.Demos.Models.DataGrid;
+
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Newtonsoft.Json.Linq;
+
+using DevExtreme.NETCore.Demos.Models.DataGrid;
 
 namespace DevExtreme.NETCore.Demos.Controllers {
     public class RemoteValidationController : Controller {
@@ -15,12 +16,11 @@ namespace DevExtreme.NETCore.Demos.Controllers {
         }
 
         [HttpPost]
-        public JsonResult CheckUniqueEmailAddress([FromBody] JObject data) {
-            int? id = (int?)data["id"];
-            string email = data["email"].ToString();
-            bool isValid = !_db.Employees.Any(emp => {
-                bool isEqual = string.Equals(emp.Email, email, StringComparison.OrdinalIgnoreCase);
-                return id != null ? id != emp.ID && isEqual : isEqual;
+        //public JsonResult CheckUniqueEmailAddress([FromBody] JObject data) {
+        public JsonResult CheckUniqueEmailAddress(EmployeeValidation data) {
+            var isValid = !_db.Employees.Any(emp => {
+                var isEqual = string.Equals(emp.Email, data.Email, StringComparison.OrdinalIgnoreCase);
+                return data.ID != emp.ID && isEqual;
             });
             return Json(isValid);
         }
