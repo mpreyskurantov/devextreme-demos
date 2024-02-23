@@ -14,6 +14,7 @@ namespace DevExtreme.NETCore.Demos.Controllers {
             _db = new InMemoryEmployeesValidationDataContext(httpContextAccessor, memoryCache);
         }
 
+        //Before
         [HttpPost]
         public JsonResult CheckUniqueEmailAddress([FromBody] JObject data) {
             int? id = (int?)data["id"];
@@ -24,6 +25,17 @@ namespace DevExtreme.NETCore.Demos.Controllers {
             });
             return Json(isValid);
         }
+
+        //After
+        [HttpPost]
+        public JsonResult CheckUniqueEmailAddress_(EmployeeValidation model) {
+            var isValid = !_db.Employees.Any(emp => {
+                var isEqual = string.Equals(emp.Email, model.Email, StringComparison.OrdinalIgnoreCase);
+                return model.ID != emp.ID && isEqual;
+            });
+            return Json(isValid);
+        }
+        //After
 
         [HttpPost]
         public JsonResult CheckEmailAddress(string email) {

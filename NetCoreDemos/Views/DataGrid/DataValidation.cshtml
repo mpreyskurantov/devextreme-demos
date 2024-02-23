@@ -14,11 +14,14 @@
         columns.AddFor(m => m.Position);
         columns.AddFor(m => m.Phone);
         columns.AddFor(m => m.Email)
+            @*Before*@
             .ValidationRules(vr => {
+                
                 vr.AddAsync()
                     .Message("Email address is not unique")
                     .ValidationCallback("asyncValidation");
             });
+            @*Before*@
     })
     .DataSource(d => d.Mvc().Controller("DataGridEmployeesValidation")
         .LoadAction("Get")
@@ -28,6 +31,7 @@
     )
 )
 
+@*Before*@
 <script>
     function asyncValidation(params) {
         return $.ajax({
@@ -42,3 +46,4 @@
         });
     }
 </script>
+@*Before*@
